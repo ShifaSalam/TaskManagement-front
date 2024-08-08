@@ -13,7 +13,6 @@ import Footer from './Components/Footer'
 import CompletedTasks from './Pages/CompletedTasks';
 import { TokenAuthContext } from './Context Api/AuthContext';
 import ImportantTasks from './Pages/ImportantTasks';
-import ScrollToTop from './Components/ScrollToTop';
 
 function App() {
 
