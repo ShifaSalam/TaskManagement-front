@@ -8,9 +8,12 @@ import Badge from 'react-bootstrap/Badge';
 
 function TaskDetail() {
 
-    const [important,setImportant]=useState(false)
+    // to store task data
     const [task, setTask] = useState([])
+
+    // Task id from path parameter
     const { tid } = useParams()
+
     useEffect(() => {
         getData()
     }, [])
@@ -25,8 +28,8 @@ function TaskDetail() {
             console.log(result.response.data)
         }
     }
-    console.log(task)
-    // console.log(task.important)
+
+    // console.log(task)
 
     return (
         <>
@@ -34,7 +37,7 @@ function TaskDetail() {
             <Container>
                 <Row className='d-flex justify-content-around'>
                     <Col className='me-5'>
-                        <img src="https://vignette.wikia.nocookie.net/bindingofisaac/images/b/b6/Todo.png/revision/latest?cb=20130325190035&path-prefix=de" height={'300px'} alt="" />
+                        <img src="https://vignette.wikia.nocookie.net/bindingofisaac/images/b/b6/Todo.png/revision/latest?cb=20130325190035&path-prefix=de" height={'300px'} alt="details-img" />
                     </Col>
                     <Col className='m-5 shadow p-5 border d-flex justify-content-between'>
                         <div>
@@ -46,13 +49,12 @@ function TaskDetail() {
                                 year: 'numeric'
                             })}</h6>
                         </div>
-                            {
-                                task.important &&
-                                <div>
+                        {
+                            task.important &&
+                            <div>
                                 <Badge bg="danger" className='py-2'>Important!</Badge>
                             </div>
-                            }
-
+                        }
                     </Col>
                 </Row>
             </Container>

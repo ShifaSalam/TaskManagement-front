@@ -49,3 +49,8 @@ export const updateCompletion =async (id, data, header) => {
 export const completedTask=async(header)=>{
     return await commonApi("GET",`${base_url}/completedTasks`,"",header)
 }
+
+// get all Important Tasks of specific users
+export const importantTask=async(header)=>{
+    return await commonApi("GET",`${base_url}/impTasks`,"",header)
+}

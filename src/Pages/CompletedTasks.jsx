@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../Components/Header'
-import { Col, Container, Row } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { allTasks, completedTask, deleteTask, updateCompletion } from '../Services/allApis'
-import AddTask from '../Components/AddTask'
-import EditTask from '../Components/EditTask'
+import { completedTask, deleteTask } from '../Services/allApis'
 import { toast } from 'react-toastify'
-import { addTaskResponseContext, editTaskResponseContext } from '../Context Api/StatusUpdate'
 
 function CompletedTasks() {
-    const [deleteStatus, setDeleteStatus] = useState({})
+    const [deleteStatus, setDeleteStatus] = useState({})   //for immediate updation when a task is deleted
+
     const [logStatus, setLogStatus] = useState(false)
     const [tasks, setTasks] = useState([])
-
 
     useEffect(() => {
         if (sessionStorage.getItem('token')) {
@@ -23,6 +20,7 @@ function CompletedTasks() {
             setLogStatus(false)
         }
     }, [deleteStatus])
+
     const getData = async () => {
         const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
         const result = await completedTask(header)
@@ -34,12 +32,12 @@ function CompletedTasks() {
             console.log(result.response.data)
         }
     }
-    const RemoveTask = async (id) => {
 
+    const RemoveTask = async (id) => {
         const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
         const result = await deleteTask(id, header)
         if (result.status == 200) {
-            toast.error("One package has been deleted!!")
+            toast.error("One Task has been deleted!!")
             setDeleteStatus(result)
         }
         else {
@@ -52,7 +50,8 @@ function CompletedTasks() {
         <>
         <Header/>
             <div className='m-4'>
-                <Row className='m-0' id='task'>
+                <h2 className='text-center border-bottom pb-2 mb-4'><i>Completed Tasks</i></h2>
+                <Row className='m-0'>
                         {
                             tasks.length > 0 ?
                                 tasks.map((item) => (
@@ -69,14 +68,14 @@ function CompletedTasks() {
                                                 <Link to={`/detail/${item._id}`} className='btn mb-2'><i class="fa-solid fa-eye fa-lg" style={{ color: 'rgb(171 180 197)' }}></i></Link>
                                             </div>
                                             <h6 style={{ textAlign: 'justify' }} className='p-3'>
-                                                {item.description}
+                                            {`${item.description.slice(0,100)}...`}
                                             </h6>
-                                            <div className='d-flex justify-content-around'>
-                                                        <button onClick={() => toggleComplete(item._id, item.isCompleted)} className='btn btn-success'>
+                                            <div className='d-flex flex-sm-wrap justify-content-around'>
+                                                        <button onClick={() => toggleComplete(item._id, item.isCompleted)} className='btn btn-success mb-3'>
                                                             Completed
                                                             <span className='ms-2'><i class="fa-regular fa-square-check" style={{color:'#ffffff'}}></i></span>
                                                         </button>
-                                                <button className='btn btn-danger' onClick={() => { RemoveTask(item?._id) }}>Delete
+                                                <button className='btn btn-danger mb-3' onClick={() => { RemoveTask(item?._id) }}>Delete
                                                     <span className="text-light ms-2"><i class="fa-regular fa-trash-can"></i></span>
                                                 </button>
                                             </div>
@@ -85,7 +84,7 @@ function CompletedTasks() {
 
                                 ))
                                 :
-                                <h3>No aded tasks</h3>
+                                <h3 className='text-warning'>You haven't completed any tasks yet!</h3>
                         }
                     </Row>
             </div>

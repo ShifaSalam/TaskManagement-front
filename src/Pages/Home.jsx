@@ -10,10 +10,11 @@ import { addTaskResponseContext, editTaskResponseContext } from '../Context Api/
 
 
 function Home() {
-    const { addTaskResponse, setAddTaskResponse } = useContext(addTaskResponseContext)
-    const { editTaskResponse, setEditTaskResponse } = useContext(editTaskResponseContext)
-    const [addStatus, setAddStatus] = useState({})
-    const [deleteStatus, setDeleteStatus] = useState({})
+
+    const { addTaskResponse, setAddTaskResponse } = useContext(addTaskResponseContext)   // for immediate update when new task added!
+    const { editTaskResponse, setEditTaskResponse } = useContext(editTaskResponseContext)  // for immediate update when task Edited!
+    const [addStatus, setAddStatus] = useState({})   // for immediate update when a task completion updated
+    const [deleteStatus, setDeleteStatus] = useState({})  // for immediate update when a task deleted
 
     const user = sessionStorage.getItem("username")
 
@@ -23,6 +24,8 @@ function Home() {
     const [taskData, setTaskData] = useState({
         taskTitle: "", description: "", date: "", important: false, isCompleted: false
     })
+
+    // to toggle complete button
     const toggleComplete = async (id, currentStatus) => {
         const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
         const newStatus = !currentStatus;
@@ -30,7 +33,7 @@ function Home() {
         if (result.status === 200) {
             setTaskData({
                 ...taskData, isCompleted: newStatus
-            });
+            })
             setAddStatus(result)
         }
         else {
@@ -39,6 +42,7 @@ function Home() {
         }
     }
 
+    // to reload component
     useEffect(() => {
         if (sessionStorage.getItem('token')) {
             getData()
@@ -48,10 +52,11 @@ function Home() {
             setLogStatus(false)
         }
     }, [addTaskResponse, editTaskResponse, addStatus, deleteStatus])
+
+    // to get all tasks
     const getData = async () => {
         const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
         const result = await allTasks(header)
-        console.log(result)
         if (result.status == 200) {
             setTasks(result.data)
         }
@@ -64,15 +69,16 @@ function Home() {
         const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
         const result = await deleteTask(id, header)
         if (result.status == 200) {
-            toast.error("One package has been deleted!!")
+            toast.error("One Task has been Removed!!")
             setDeleteStatus(result)
         }
         else {
             console.log(result)
             toast.error(result.response.data)
         }
+
     }
-    console.log(taskData)
+    // console.log(taskData)
     return (
         <>
             <Header />
@@ -101,63 +107,69 @@ function Home() {
                         <p class="quote"><i>"From List to Done"</i></p>
                     </div>
                 </div>
-                
+
             </Container>
 
             {/* SECOND SECTION */}
 
             {
                 !logStatus ?
-                <div className='text-center mb-5'>
-                    <Link to={'/reg'} className='btn btn-secondary start'>Get Started</Link>
-                </div>
-                :
-                <section>
-                    <h1 className='m-5'>Welcome to Task Cloud , <span><b><i>{user}</i></b></span></h1>
-                    <AddTask />
-                    <Row className='m-0' id='task'>
-                        {
-                            tasks.length > 0 ?
-                                tasks.map((item) => (
-                                    <Col sm='5' md='4' lg='4'>
-                                        <div className='m-3 shadow p-3'>
-                                            <div className='d-flex justify-content-between'>
-                                                <div className='d-flex'>
-                                                    <h3>{item.taskTitle}</h3>
-                                                    {
-                                                        item.important && (
-                                                            <span className='m-2'><i class="fa-solid fa-thumbtack fa-lg" style={{ color: '#730c21' }}></i></span>
-                                                        )}
+                    <div className='text-center mb-5'>
+                        <Link to={'/reg'} className='btn btn-secondary start'>Get Started</Link>
+                    </div>
+                    :
+                    <section>
+                        <h1 className='m-5'>Welcome to Task Cloud , <span><b><i>{user}</i></b></span></h1>
+                        <AddTask />
+                        <Row className='m-0' id='home-task'>
+                            {
+                                tasks.length > 0 ?
+                                    tasks.map((item) => (
+                                        <Col sm='5' md='4' lg='4'>
+                                            <div className='m-3 shadow p-3 h-100'>
+                                                <div className='d-flex justify-content-between'>
+                                                    <div className='d-flex'>
+                                                        <h3>{item.taskTitle}</h3>
+                                                        {
+                                                            item.important && (
+                                                                <span className='m-2'><i class="fa-solid fa-thumbtack fa-lg" style={{ color: '#730c21' }}></i></span>
+                                                            )}
+                                                    </div>
+                                                    <Link to={`/detail/${item._id}`} className='btn mb-2'><i class="fa-solid fa-eye fa-lg" style={{ color: 'rgb(171 180 197)' }}></i></Link>
                                                 </div>
-                                                <Link to={`/detail/${item._id}`} className='btn mb-2'><i class="fa-solid fa-eye fa-lg" style={{ color: 'rgb(171 180 197)' }}></i></Link>
-                                            </div>
-                                            <h6 style={{ textAlign: 'justify' }} className='p-3'>
-                                                {item.description}
-                                            </h6>
-                                            <div className='d-flex justify-content-around'>
-                                                {
-                                                    !item.isCompleted ?
-                                                        <button onClick={() => toggleComplete(item._id, item.isCompleted)} className='btn btn-outline-success'>Complete</button>
-                                                        :
-                                                        <button onClick={() => toggleComplete(item._id, item.isCompleted)} className='btn btn-success'>
-                                                            Completed
-                                                            <span className='ms-2'><i class="fa-regular fa-square-check" style={{color:'#ffffff'}}></i></span>
+                                                <h6 style={{ textAlign: 'justify' }} className='p-3'>
+                                                    {`${item.description.slice(0, 55)}...`}
+                                                </h6>
+                                                <div className='d-flex flex-sm-wrap justify-content-around'>
+                                                    <div >
+                                                        {
+                                                            !item.isCompleted ?
+                                                                <button onClick={() => toggleComplete(item._id, item.isCompleted)} className='btn btn-outline-success'>Complete</button>
+                                                                :
+                                                                <button onClick={() => toggleComplete(item._id, item.isCompleted)} className='btn btn-success'>
+                                                                    Completed
+                                                                    <span className='ms-2'><i class="fa-regular fa-square-check" style={{ color: '#ffffff' }}></i></span>
+                                                                </button>
+                                                        }
+                                                    </div>
+                                                    <div>
+                                                        <EditTask task={item} />
+                                                    </div>
+                                                    <div>
+                                                        <button className='btn btn-danger' onClick={() => { RemoveTask(item?._id) }}>Delete
+                                                            <span className="text-light ms-2"><i class="fa-regular fa-trash-can"></i></span>
                                                         </button>
-                                                }
-                                                <EditTask task={item} />
-                                                <button className='btn btn-danger' onClick={() => { RemoveTask(item?._id) }}>Delete
-                                                    <span className="text-light ms-2"><i class="fa-regular fa-trash-can"></i></span>
-                                                </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Col>
+                                        </Col>
 
-                                ))
-                                :
-                                <h3>No aded tasks</h3>
-                        }
-                    </Row>
-                </section>
+                                    ))
+                                    :
+                                    <h3 className='my-5 px-5'>No tasks added yet. Start by adding a new task!</h3>
+                            }
+                        </Row>
+                    </section >
             }
         </>
     )

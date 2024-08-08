@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import { useState } from 'react';
+import React, { useState, useContext } from 'react'
 import { FloatingLabel } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -10,17 +9,17 @@ import { addTaskResponseContext } from '../Context Api/StatusUpdate';
 
 function AddTask() {
 
-    const { addTaskResponse, setAddTaskResponse } = useContext(addTaskResponseContext)
-
+    const { addTaskResponse, setAddTaskResponse } = useContext(addTaskResponseContext)   //to reload the component when a new task is added
 
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const [taskData, setTaskData] = useState({
-        taskTitle: "", description: "", date: "", important: false, isCompleted:false
+        taskTitle: "", description: "", date: "", important: false, isCompleted: false
     })
+
+    // to toggle importance button
     const toggleImportance = () => {
         setTaskData(prevTask => ({
             ...prevTask,
@@ -34,12 +33,11 @@ function AddTask() {
         const { taskTitle, description, date, important } = taskData
         if (!taskTitle || !description || !date) {
             toast.warning("Provide Complete Data!!")
-            // console.log(packageName, state, description, rate, maxGroupSize, image)
         }
         else {
             try {
                 const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
-                const result = await addTask(taskData,header);
+                const result = await addTask(taskData, header);
                 console.log(result)
                 if (result.status === 200) {
                     toast.success('Task Added');
@@ -56,6 +54,7 @@ function AddTask() {
             }
         }
     }
+
     // console.log(taskData)
 
     return (
@@ -73,17 +72,16 @@ function AddTask() {
                     <Form>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Title</Form.Label>
-                            <Form.Control type="email" placeholder="Task title" autoFocus onChange={(e) => { setTaskData({ ...taskData, taskTitle: e.target.value }) }} />
+                            <Form.Control type="email" required placeholder="Task title" onChange={(e) => { setTaskData({ ...taskData, taskTitle: e.target.value }) }} />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1"
-                        >
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" rows={3} placeholder='Describe your task here..' onChange={(e) => { setTaskData({ ...taskData, description: e.target.value }) }} />
+                            <Form.Control as="textarea" required rows={3} placeholder='Describe your task here..' onChange={(e) => { setTaskData({ ...taskData, description: e.target.value }) }} />
                         </Form.Group>
                         <FloatingLabel controlId="floatingInput" label="Due Date" className="mb-2 w-50">
                             <Form.Control type="date" required placeholder="" min={today} onChange={(e) => { setTaskData({ ...taskData, date: e.target.value }) }} />
                         </FloatingLabel>
-                        <div className="border" style={{width:'253px'}}>
+                        <div className="border" style={{ width: '253px' }}>
                             <button type="button" onClick={() => toggleImportance(true)} className={taskData.important ? 'btn btn-danger' : 'btn btn-outline-danger'}>
                                 Important
                             </button>
