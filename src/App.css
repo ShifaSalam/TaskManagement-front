@@ -1,0 +1,65 @@
+.header {
+  color: #041d7e;
+  font-weight: bold;
+  font-size: smaller;
+}
+
+nav {
+  background-color: #dff6ff;
+
+}
+
+.nav-link:hover {
+  color: #041d7e !important;
+  border-bottom: 2px solid #041d7e;
+}
+
+.register {
+  background-image: url('https://i.pinimg.com/originals/bd/c6/ba/bdc6bad25f6133f12ba39364e0bc9b9a.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.login {
+  background-image: url('https://thewebaround.com/wp-content/uploads/2021/07/joanna-kosinska-RE-8WswW95o-unsplash-1536x1025.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.logo {
+  animation: fade 2s infinite;
+}
+
+@keyframes fade {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.btn-log,
+.btn-reg {
+  background-color: #6372ac;
+}
+
+.btn-log:hover,
+.btn-reg:hover {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.start {
+  cursor: pointer;
+  border-radius: 4px;
+  animation: beat 1s infinite;
+}
+
+@keyframes beat {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}

@@ -1,0 +1,15 @@
+*{
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+}
+::-webkit-scrollbar{
+  display: none;
+}
+.navbar{
+  top: 0px;
+  position: sticky;
+  z-index: 4;
+}
