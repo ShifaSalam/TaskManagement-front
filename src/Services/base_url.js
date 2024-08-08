@@ -1,3 +1,3 @@
-const base_url="https://taskmanager-back-0u5d.onrender.com"
+const base_url="http://localhost:3001"
 
 export default base_url
