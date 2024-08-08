@@ -58,7 +58,7 @@ function Login() {
     return (
         <>
             <div class="login p-5 d-flex justify-content-center">
-                <div class=" d-flex justify-content-center align-items-center">
+                <div class=" d-flex py-5 my-5 justify-content-center align-items-center">
                     <div class="card" style={{ borderRadius: '1rem' }}>
                         <div class="card-body">
                             <div class="logo mb-3 d-flex justify-content-center">
